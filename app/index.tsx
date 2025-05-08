@@ -75,33 +75,6 @@ export default function Index() {
 
 
 
-      {/* Bottom Section */}
-      <SafeAreaView className="h-20 bg-support/25 items-center justify-center">
-        <SafeAreaView className="flex-row space-x-20 flex-row gap-20">
-          <Pressable 
-            className="bg-white px-6 py-3 rounded-full"
-            style={({ pressed }) => [
-              {
-                transform: [{ scale: pressed ? 0.95 : 2 }],
-                opacity: pressed ? 0.9 : 2,
-              },
-            ]}
-          >
-            <Text className="text-accent font-semibold text-lg">Facebook</Text>
-          </Pressable>
-          <Pressable 
-            className="bg-white px-6 py-3 rounded-full"
-            style={({ pressed }) => [
-              {
-                transform: [{ scale: pressed ? 0.95 : 1 }],
-                opacity: pressed ? 0.9 : 1,
-              },
-            ]}
-          >
-            <Text className="text-accent font-semibold text-lg">Gmail</Text>
-          </Pressable>
-        </SafeAreaView>
-      </SafeAreaView>
-    </SafeAreaView>
+     
   );
 }
