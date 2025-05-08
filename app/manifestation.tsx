@@ -1,24 +1,26 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Dimensions, FlatList, Pressable, Text, View } from "react-native";
+
+interface Quote {
+  id: number;
+  text: string;
+  author: string;
+}
 
 export default function Manifestation() {
   const navigation = useNavigation();
   const [favorites, setFavorites] = useState<number[]>([]);
+  const { height } = Dimensions.get('window');
 
   useLayoutEffect(() => {
     navigation.setOptions({ 
-      headerShown: true,
-      title: "Manifestation Quotes",
-      headerStyle: {
-        backgroundColor: '#f0f0f0', // bg-accent/20 equivalent
-      },
-      headerTintColor: '#000000', // text-texts equivalent
+      headerShown: false
     });
   }, [navigation]);
 
-  const quotes = [
+  const quotes: Quote[] = [
     {
       id: 1,
       text: "What you think, you become. What you feel, you attract. What you imagine, you create.",
@@ -48,23 +50,7 @@ export default function Manifestation() {
       id: 6,
       text: "The only way to do great work is to love what you do.",
       author: "Steve Jobs"
-    },
-    {
-      id: 7,
-      text: "The only way to do great work is to love what you do.",
-      author: "Steve Jobs"
-    },
-    {
-      id: 8,
-      text: "The only way to do great work is to love what you do.",
-      author: "Steve Jobs"
-    },
-    {
-      id: 9,
-      text: "The only way to do great work is to love what you do.",
-      author: "Steve Jobs"
-    },
-    
+    }
   ];
 
   const toggleFavorite = (id: number) => {
@@ -75,31 +61,44 @@ export default function Manifestation() {
     );
   };
 
-  return (
-    <SafeAreaView className="flex-1 bg-background">
-      <ScrollView className="flex-1 px-4 py-6">
-        {quotes.map((quote) => (
-          <View 
-            key={quote.id}
-            className="bg-accent/30 p-4 rounded-2xl mb-4"
+  const renderQuote = ({ item: quote }: { item: Quote }) => (
+    <View 
+      style={{ height: height }}
+      className="flex-1 justify-center items-center px-6 bg-background"
+    >
+      <View className="bg-accent/30 p-8 rounded-3xl w-full h-[80%] justify-center">
+        <Text className="text-3xl text-texts text-center mb-8 leading-relaxed">
+          "{quote.text}"
+        </Text>
+        <View className="flex-row justify-between items-center">
+          <Text className="text-texts/70 italic text-xl">- {quote.author}</Text>
+          <Pressable
+            onPress={() => toggleFavorite(quote.id)}
+            className="p-2"
           >
-            <Text className="text-lg text-texts mb-2">{quote.text}</Text>
-            <View className="flex-row justify-between items-center">
-              <Text className="text-texts/70 italic">- {quote.author}</Text>
-              <Pressable
-                onPress={() => toggleFavorite(quote.id)}
-                className="p-2"
-              >
-                <Ionicons 
-                  name={favorites.includes(quote.id) ? "heart" : "heart-outline"} 
-                  size={24} 
-                  color={favorites.includes(quote.id) ? "#ff4444" : "#666666"}
-                />
-              </Pressable>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+            <Ionicons 
+              name={favorites.includes(quote.id) ? "heart" : "heart-outline"} 
+              size={32} 
+              color={favorites.includes(quote.id) ? "#ff4444" : "#666666"}
+            />
+          </Pressable>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <View className="flex-1 bg-background">
+      <FlatList
+        data={quotes}
+        renderItem={renderQuote}
+        keyExtractor={(item) => item.id.toString()}
+        showsVerticalScrollIndicator={false}
+        snapToInterval={height}
+        decelerationRate="fast"
+        snapToAlignment="center"
+        pagingEnabled
+      />
+    </View>
   );
 }
