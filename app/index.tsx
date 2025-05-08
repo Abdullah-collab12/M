@@ -1,7 +1,20 @@
-import { Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
+import { useLayoutEffect } from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import './globals.css';
+
+
+
+
 export default function Index() {
+
+  const navigation = useNavigation();
+
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       {/* Top Section */}
@@ -69,12 +82,22 @@ export default function Index() {
         </Pressable></Link>
       </SafeAreaView>
 
-
-          
-
-
-
-
-     
+      {/* Bottom Section - Login */}
+      <View className="p-4 border-t border-accent/20">
+        <Link href="/login" asChild>
+          <Pressable 
+            className="w-full bg-accent/30 p-4 rounded-2xl"
+            style={({ pressed }) => [
+              {
+                transform: [{ scale: pressed ? 0.98 : 1 }],
+                opacity: pressed ? 0.9 : 1,
+              },
+            ]}
+          >
+            <Text className="text-xl font-semibold text-texts text-center">Login / Sign Up</Text>
+          </Pressable>
+        </Link>
+      </View>
+    </SafeAreaView>
   );
 }
